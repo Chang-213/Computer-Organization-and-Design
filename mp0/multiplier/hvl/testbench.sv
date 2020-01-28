@@ -43,8 +43,138 @@ initial itf.reset_n = 1'b0;
 initial begin
     reset();
     /********************** Your Code Here *****************************/
-    
+    ready_check: assert(itf.rdy == 1)
+    else begin
+      $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+      report_error (NOT_READY);
+    end
+    for (int i = 0; i < 256; i++)
+      begin
+        for(int j = 0; j < 256; j++)
+          begin
+            ##(1);
+            //$display("The value of ready is: %d ", itf.rdy);
+            if (itf.rdy == 1)
+              begin
+                  //$display("The value of DONE is: %d", itf.done);
+                  //$display("The value of product is: %d", itf.product);
+                  if(itf.done == 1)
+                    begin
+                      output_check: assert(itf.product == itf.multiplicand*itf.multiplier)
+                      else begin
+                        $error ("%0d: %0t: BAD_PRODUCT error detected", `__LINE__, $time);
+                        report_error (BAD_PRODUCT);
+                      end
+                      ready_check7: assert(itf.rdy == 1)
+                      else begin
+                        $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+                        report_error (NOT_READY);
+                      end
+                    end
+                  itf.multiplicand <= i;
+                  itf.multiplier <= j;
+                  itf.start <= 1;
+                  //$display("The value of DONE is: %d", itf.done);
+                  ##(16);
+                  //$display("The value of product is: %d %d %d", itf.product, itf.multiplier, itf.multiplicand);
+                  //$display("The value of DONE is: %d", itf.done);
+              end
+          end
+      end
+      ##(1);
+      if(itf.done == 1)
+        begin
+          output_check: assert(itf.product == itf.multiplicand*itf.multiplier)
+          else begin
+            $error ("%0d: %0t: BAD_PRODUCT error detected", `__LINE__, $time);
+            report_error (BAD_PRODUCT);
+          end
+          ready_check7: assert(itf.rdy == 1)
+          else begin
+            $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+            report_error (NOT_READY);
+          end
+        end
+      //$display("The value of DONE is: %d", itf.done);
+      //$display("The value of product is: %d %d %d", itf.product, itf.multiplier, itf.multiplicand);
 
+
+    //START OF ASSERT start_i WHILE IN RUN STATE
+    begin
+      itf.multiplicand <= $urandom_range(255,0);
+      itf.multiplier <= $urandom_range(255,0);
+      itf.start <= 1;
+      ##(1);
+      //$display("The value of multiplicand is: %d", itf.multiplicand);
+      //$display("The value of multiplier is: %d", itf.multiplier);
+      //$display("The value of DONE is: %d", itf.done);
+      //$display("The value of Ready is: %d", itf.rdy);
+
+      itf.start <= 1;
+      @(tb_clk iff(itf.mult_op == 3'b101));
+
+      itf.start <= 1;
+      @(tb_clk iff(itf.mult_op == 3'b110));
+
+      ##(13);
+      //$display("The value of product is: %d %d %d", itf.product, itf.multiplier, itf.multiplicand);
+      //$display("The value of DONE is: %d", itf.done);
+      //$display("The value of Ready is: %d", itf.rdy);
+      if(itf.done == 1)
+        begin
+          output_check2: assert(itf.product == itf.multiplicand*itf.multiplier)
+          else begin
+            $error ("%0d: %0t: BAD_PRODUCT error detected", `__LINE__, $time);
+            report_error (BAD_PRODUCT);
+          end
+        end
+        ready_check4: assert(itf.rdy == 1)
+        else begin
+          $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+          report_error (NOT_READY);
+        end
+    end
+    //END OF ASSERT start_i WHILE IN RUN STATE
+
+
+    begin
+      itf.multiplicand <= $urandom_range(255,0);
+      itf.multiplier <= $urandom_range(255,0);
+      itf.start <= 1;
+      ##(1);
+      $display("The value of DONE1 is: %d", itf.done);
+      $display("The value of ready1 is: %d", itf.rdy);
+      $display("The value of reset1 is: %d", itf.reset_n);
+      itf.reset_n <= 0;
+      $display("We maed it");
+      
+      @(tb_clk iff(itf.mult_op == 3'b101));
+
+      $display("oops");
+      $display("The value of DONE is: %d", itf.done);
+      $display("The value of ready is: %d", itf.rdy);
+      $display("The value of reset is: %d", itf.reset_n);
+      ready_check11: assert(itf.rdy == 1)
+      else begin
+        $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+        report_error (NOT_READY);
+      end
+    end
+
+    begin
+      itf.multiplicand <= $urandom_range(255,0);
+      itf.multiplier <= $urandom_range(255,0);
+      itf.start <= 1;
+      ##(1);
+
+      itf.reset_n <= 0;
+      @(tb_clk iff(itf.mult_op == 3'b110));
+      ready_check10: assert(itf.rdy == 1)
+      else begin
+        $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);
+        report_error (NOT_READY);
+      end
+    end
     /*******************************************************************/
     itf.finish(); // Use this finish task in order to let grading harness
                   // complete in process and/or scheduled operations
