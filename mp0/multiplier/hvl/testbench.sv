@@ -147,8 +147,8 @@ initial begin
       $display("The value of reset1 is: %d", itf.reset_n);
       itf.reset_n <= 0;
       $display("We maed it");
-      
-      @(tb_clk iff(itf.mult_op == 3'b101));
+
+      @(dut.ms.op == 3'b101);
 
       $display("oops");
       $display("The value of DONE is: %d", itf.done);
@@ -165,10 +165,19 @@ initial begin
       itf.multiplicand <= $urandom_range(255,0);
       itf.multiplier <= $urandom_range(255,0);
       itf.start <= 1;
-      ##(1);
-
+      ##(8);
+      $display("The value of DONE1 is: %d", itf.done);
+      $display("The value of ready1 is: %d", itf.rdy);
+      $display("The value of reset1 is: %d", itf.reset_n);
       itf.reset_n <= 0;
-      @(tb_clk iff(itf.mult_op == 3'b110));
+      $display("We maed it");
+
+      //@(dut.ms.op == 3'b110);
+
+      $display("oops");
+      $display("The value of DONE is: %d", itf.done);
+      $display("The value of ready is: %d", itf.rdy);
+      $display("The value of reset is: %d", itf.reset_n);
       ready_check10: assert(itf.rdy == 1)
       else begin
         $error ("%0d: %0t: NOT_READY error detected", `__LINE__, $time);

@@ -9,17 +9,17 @@
 # 
 # vlog -sv -work work  {./include/types.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 15:02:02 on Jan 28,2020
+# Start time: 15:57:18 on Jan 28,2020
 # vlog -sv -work work ./include/types.sv 
 # -- Compiling package mult_types
 # 
 # Top level modules:
 # 	--none--
-# End time: 15:02:02 on Jan 28,2020, Elapsed time: 0:00:00
+# End time: 15:57:18 on Jan 28,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work  {./hdl/add_shift_multiplier.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 15:02:02 on Jan 28,2020
+# Start time: 15:57:18 on Jan 28,2020
 # vlog -sv -work work ./hdl/add_shift_multiplier.sv 
 # -- Compiling package add_shift_multiplier_sv_unit
 # -- Importing package mult_types
@@ -27,11 +27,11 @@
 # 
 # Top level modules:
 # 	add_shift_multiplier
-# End time: 15:02:02 on Jan 28,2020, Elapsed time: 0:00:00
+# End time: 15:57:18 on Jan 28,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work  {./hvl/top.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 15:02:02 on Jan 28,2020
+# Start time: 15:57:18 on Jan 28,2020
 # vlog -sv -work work ./hvl/top.sv 
 # -- Compiling package top_sv_unit
 # -- Importing package mult_types
@@ -41,11 +41,11 @@
 # 
 # Top level modules:
 # 	top
-# End time: 15:02:02 on Jan 28,2020, Elapsed time: 0:00:00
+# End time: 15:57:19 on Jan 28,2020, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # vlog -sv -work work  {./hvl/testbench.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 15:02:02 on Jan 28,2020
+# Start time: 15:57:19 on Jan 28,2020
 # vlog -sv -work work ./hvl/testbench.sv 
 # -- Compiling package testbench_sv_unit
 # -- Importing package mult_types
@@ -53,11 +53,11 @@
 # 
 # Top level modules:
 # 	testbench
-# End time: 15:02:02 on Jan 28,2020, Elapsed time: 0:00:00
+# End time: 15:57:19 on Jan 28,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -sv -work work  {./grader/grader.sv}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 15:02:02 on Jan 28,2020
+# Start time: 15:57:19 on Jan 28,2020
 # vlog -sv -work work ./grader/grader.sv 
 # -- Compiling package grader_sv_unit
 # -- Importing package mult_types
@@ -65,12 +65,12 @@
 # 
 # Top level modules:
 # 	grader
-# End time: 15:02:03 on Jan 28,2020, Elapsed time: 0:00:01
+# End time: 15:57:19 on Jan 28,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # 
 # vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver -L rtl_work -L work -voptargs="+acc"  top
 # vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver -L rtl_work -L work -voptargs=""+acc"" top 
-# Start time: 15:02:03 on Jan 28,2020
+# Start time: 15:57:19 on Jan 28,2020
 # Loading sv_std.std
 # Loading work.mult_types
 # Loading work.top_sv_unit
@@ -89,9 +89,20 @@
 # The value of ready1 is: 0
 # The value of reset1 is: 1
 # We maed it
-# GDR: Grader timed out
-# ** Note: $finish    : ./grader/grader.sv(16)
-#    Time: 65535995 ps  Iteration: 1  Instance: /top/grd
+# oops
+# The value of DONE is: 0
+# The value of ready is: 1
+# The value of reset is: 0
+# The value of DONE1 is: 0
+# The value of ready1 is: 1
+# The value of reset1 is: 0
+# We maed it
+# oops
+# The value of DONE is: 0
+# The value of ready is: 1
+# The value of reset is: 0
+# ** Note: $finish    : include/multiplier_itf.sv(45)
+#    Time: 11142450 ps  Iteration: 0  Instance: /top/tb
 # GDR: Cleaning-up Test Run
-# End time: 15:02:22 on Jan 28,2020, Elapsed time: 0:00:19
+# End time: 15:57:26 on Jan 28,2020, Elapsed time: 0:00:07
 # Errors: 0, Warnings: 0
