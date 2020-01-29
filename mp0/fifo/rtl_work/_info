@@ -1,0 +1,256 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/changml2/ECE411/mp0/fifo
+Yfifo_itf
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 DXx4 work 10 fifo_types 0 22 knD5hY5WzBHIA7cc[NzzN3
+Z3 !s110 1580277115
+!i10b 1
+!s100 mnNQ;Z6TV]15Oc38<eh9:1
+IFREBRcd6]896C7l]J?gLm0
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+Z5 !s105 top_sv_unit
+S1
+R0
+Z6 w1580087287
+8include/fifo_itf.sv
+Z7 Finclude/fifo_itf.sv
+L0 4
+Z8 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z9 !s108 1580277115.000000
+Z10 !s107 grader/grader.sv|include/fifo_itf.sv|./hvl/top.sv|
+Z11 !s90 -sv|-work|work|./hvl/top.sv|
+!i113 1
+Z12 o-sv -work work
+Z13 tCvgOpt 0
+Xfifo_sv_unit
+R1
+R2
+VO55IEFJ:5EgoeM>Lfegnn0
+r1
+!s85 0
+31
+!i10b 1
+!s100 Fe?<b`W?hhA9c7XcUX_TO3
+IO55IEFJ:5EgoeM>Lfegnn0
+!i103 1
+S1
+R0
+R6
+Z14 8./hdl/fifo.sv
+Z15 F./hdl/fifo.sv
+L0 1
+R8
+R9
+Z16 !s107 ./hdl/fifo.sv|
+Z17 !s90 -sv|-work|work|./hdl/fifo.sv|
+!i113 1
+R12
+R13
+vfifo_synch_1r1w
+R1
+R2
+DXx4 work 12 fifo_sv_unit 0 22 O55IEFJ:5EgoeM>Lfegnn0
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 l>R`j_;nkDBm>h?<o^TzR3
+IR[3j8ibAH4blRJ;GggD3X0
+!s105 fifo_sv_unit
+S1
+R0
+R6
+R14
+R15
+L0 3
+R8
+R9
+R16
+R17
+!i113 1
+R12
+R13
+Xfifo_types
+R1
+R3
+!i10b 1
+!s100 aE:BO1bj]2DzW>z37B]=i0
+IknD5hY5WzBHIA7cc[NzzN3
+VknD5hY5WzBHIA7cc[NzzN3
+S1
+R0
+R6
+8./include/types.sv
+F./include/types.sv
+L0 1
+R8
+r1
+!s85 0
+31
+R9
+!s107 ./include/types.sv|
+!s90 -sv|-work|work|./include/types.sv|
+!i113 1
+R12
+R13
+vgrader
+R1
+R2
+Z18 DXx4 work 11 top_sv_unit 0 22 J^JSi`N>1EHM0z8MVc@il0
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 kjnOcUEc8SoKAjVzFbeQl2
+IUWg_Hj@lIacA>fF4?Tbo21
+R5
+S1
+R0
+R6
+8grader/grader.sv
+Z19 Fgrader/grader.sv
+L0 5
+R8
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Xgrader_sv_unit
+R1
+R2
+VTzjn<7XT6>mmdgAh>JonE1
+r1
+!s85 0
+31
+!i10b 1
+!s100 XUf<QLm[L06WE=cVF:z6T2
+ITzjn<7XT6>mmdgAh>JonE1
+!i103 1
+S1
+R0
+R6
+8./grader/grader.sv
+F./grader/grader.sv
+L0 4
+R8
+R9
+!s107 ./grader/grader.sv|
+!s90 -sv|-work|work|./grader/grader.sv|
+!i113 1
+R12
+R13
+vtestbench
+R1
+R2
+DXx4 work 17 testbench_sv_unit 0 22 B]C6AX;P_0k1CO33Z2C0`2
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 SeN^N3B@1hhnTR8VlK@8A0
+IkW8kICYezaznKTgWI^>7e0
+!s105 testbench_sv_unit
+S1
+R0
+Z20 w1580277099
+Z21 8./hvl/testbench.sv
+Z22 F./hvl/testbench.sv
+L0 6
+R8
+R9
+Z23 !s107 ./hvl/testbench.sv|
+Z24 !s90 -sv|-work|work|./hvl/testbench.sv|
+!i113 1
+R12
+R13
+Xtestbench_sv_unit
+R1
+R2
+VB]C6AX;P_0k1CO33Z2C0`2
+r1
+!s85 0
+31
+!i10b 1
+!s100 `4<mV0@a@>oSSU3Al[Fl`1
+IB]C6AX;P_0k1CO33Z2C0`2
+!i103 1
+S1
+R0
+R20
+R21
+R22
+L0 4
+R8
+R9
+R23
+R24
+!i113 1
+R12
+R13
+vtop
+R1
+R2
+R18
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 Ra[Y?HKm4f>oOSYglYang1
+I=z?13aGJgo@NWO_HR1zGD0
+R5
+S1
+R0
+R6
+Z25 8./hvl/top.sv
+Z26 F./hvl/top.sv
+L0 5
+R8
+R9
+R10
+R11
+!i113 1
+R12
+R13
+Xtop_sv_unit
+R1
+R2
+VJ^JSi`N>1EHM0z8MVc@il0
+r1
+!s85 0
+31
+!i10b 1
+!s100 l;^<L^o5LDU0g9Lgm^1^i1
+IJ^JSi`N>1EHM0z8MVc@il0
+!i103 1
+S1
+R0
+R6
+R25
+R26
+R7
+R19
+L0 4
+R8
+R9
+R10
+R11
+!i113 1
+R12
+R13
