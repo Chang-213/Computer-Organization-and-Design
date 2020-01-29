@@ -41,16 +41,15 @@ initial begin
     /************************ Your Code Here ***********************/
     // Feel free to make helper tasks / functions, initial / always blocks, etc.
     begin
+    $display("Yop");
+    $display("Bop");
 
     //ENQUEUE COVERAGE START
       for(int i = 0; i < 256; i++)
         begin
-          itf.data_i <= i;
-          ##(1);
-          $display("The value of data_i is: %d", itf.data_i);
-          $display("The value of ready is: %d", itf.rdy);
           if(itf.rdy == 1)
             begin
+              itf.data_i <= i;
               itf.valid_i <= 1;
               ##(1);
             end
@@ -58,31 +57,65 @@ initial begin
     //ENQUEUE COVERAGE END
 
     //DEQUEU COVERAGE START
-      for(int j = 0; j < 256; j++)
+      for(int j = 0; j < 255; j++)
         begin
-          $display("The value of valid is: %d", itf.valid_o);
           if(itf.valid_o == 1)
             begin
-
-              $display("The value of PRE data_o is: %d", itf.data_o);
-              $display("The value of j is: %d", j);
               data_check: assert(itf.data_o == j)
               else begin
                 $error ("%0d: %0t: %s error detected", `__LINE__, $time, INCORRECT_DATA_O_ON_YUMI_I);
                 report_error (INCORRECT_DATA_O_ON_YUMI_I);
               end
-
               itf.yumi <= 1;
               ##(1);
-              ##(1);
-              $display("The value of data_o is: %d", itf.data_o);
-
-
+              //$display("j is: %d", j);
+              //$display("Yo data_o is: %d", itf.data_o);
+              //$display("Yo valid is: %d", itf.valid_o);
             end
         end
+
     //DEQUEUE COVERAGE END
 
+    //SIMULTANEOUS ENQUEUE AND deqeueue
+      //$display("Yo FIRST data_o is: %d", itf.data_o);
+    //for(int k = 256; k < 511; k++)
+      //begin
+        //if(itf.rdy == 1)
+          //begin
+            //itf.data_i <= k;
+            //itf.valid_i <= 1;
+            //##(1);
+            //$display("data_i is: %d", itf.data_i);
+          //end
 
+          //if(itf.valid_o == 1)
+            //begin
+            //$display("Yo data_o is: %d", itf.data_o);
+            //$display("k is: %d", k);
+            //if(k == 256)
+            //begin
+              //data_check: assert(itf.data_o == 255)
+              //else begin
+                //$error ("%0d: %0t: %s error detected", `__LINE__, $time, INCORRECT_DATA_O_ON_YUMI_I);
+                //report_error (INCORRECT_DATA_O_ON_YUMI_I);
+                //end
+              //itf.yumi <= 1;
+              //##(1);
+              //$display("Yo post 255 data_o is: %d", itf.data_o);
+            //end
+          //else
+            //begin
+              //data_check2: assert(itf.data_o == k-256)
+              //else begin
+                //$error ("%0d: %0t: %s error detected", `__LINE__, $time, INCORRECT_DATA_O_ON_YUMI_I);
+                //report_error (INCORRECT_DATA_O_ON_YUMI_I);
+              //end
+              //itf.yumi <= 1;
+              //##(1);
+            //end
+          //end
+      //end
+    //END SIMULTANEOUS
 
     //RESET ERROR TESTING
     itf.reset_n <= 0;

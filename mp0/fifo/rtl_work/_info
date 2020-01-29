@@ -11,28 +11,28 @@ Z0 d/home/changml2/ECE411/mp0/fifo
 Yfifo_itf
 Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
 Z2 DXx4 work 10 fifo_types 0 22 knD5hY5WzBHIA7cc[NzzN3
-Z3 !s110 1580277115
+!s110 1580338294
 !i10b 1
 !s100 mnNQ;Z6TV]15Oc38<eh9:1
 IFREBRcd6]896C7l]J?gLm0
-Z4 VDg1SIo80bB@j0V0VzS_@n1
-Z5 !s105 top_sv_unit
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+Z4 !s105 top_sv_unit
 S1
 R0
-Z6 w1580087287
+Z5 w1580087287
 8include/fifo_itf.sv
-Z7 Finclude/fifo_itf.sv
+Z6 Finclude/fifo_itf.sv
 L0 4
-Z8 OV;L;10.5b;63
+Z7 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z9 !s108 1580277115.000000
-Z10 !s107 grader/grader.sv|include/fifo_itf.sv|./hvl/top.sv|
-Z11 !s90 -sv|-work|work|./hvl/top.sv|
+Z8 !s108 1580338294.000000
+Z9 !s107 grader/grader.sv|include/fifo_itf.sv|./hvl/top.sv|
+Z10 !s90 -sv|-work|work|./hvl/top.sv|
 !i113 1
-Z12 o-sv -work work
-Z13 tCvgOpt 0
+Z11 o-sv -work work
+Z12 tCvgOpt 0
 Xfifo_sv_unit
 R1
 R2
@@ -46,22 +46,22 @@ IO55IEFJ:5EgoeM>Lfegnn0
 !i103 1
 S1
 R0
-R6
-Z14 8./hdl/fifo.sv
-Z15 F./hdl/fifo.sv
+R5
+Z13 8./hdl/fifo.sv
+Z14 F./hdl/fifo.sv
 L0 1
+R7
 R8
-R9
-Z16 !s107 ./hdl/fifo.sv|
-Z17 !s90 -sv|-work|work|./hdl/fifo.sv|
+Z15 !s107 ./hdl/fifo.sv|
+Z16 !s90 -sv|-work|work|./hdl/fifo.sv|
 !i113 1
+R11
 R12
-R13
 vfifo_synch_1r1w
 R1
 R2
 DXx4 work 12 fifo_sv_unit 0 22 O55IEFJ:5EgoeM>Lfegnn0
-R4
+R3
 r1
 !s85 0
 31
@@ -71,65 +71,65 @@ IR[3j8ibAH4blRJ;GggD3X0
 !s105 fifo_sv_unit
 S1
 R0
-R6
-R14
-R15
-L0 3
-R8
-R9
-R16
-R17
-!i113 1
-R12
+R5
 R13
+R14
+L0 3
+R7
+R8
+R15
+R16
+!i113 1
+R11
+R12
 Xfifo_types
 R1
-R3
+!s110 1580338293
 !i10b 1
 !s100 aE:BO1bj]2DzW>z37B]=i0
 IknD5hY5WzBHIA7cc[NzzN3
 VknD5hY5WzBHIA7cc[NzzN3
 S1
 R0
-R6
+R5
 8./include/types.sv
 F./include/types.sv
 L0 1
-R8
+R7
 r1
 !s85 0
 31
-R9
+!s108 1580338293.000000
 !s107 ./include/types.sv|
 !s90 -sv|-work|work|./include/types.sv|
 !i113 1
+R11
 R12
-R13
 vgrader
 R1
 R2
-Z18 DXx4 work 11 top_sv_unit 0 22 J^JSi`N>1EHM0z8MVc@il0
-R4
+Z17 DXx4 work 11 top_sv_unit 0 22 J^JSi`N>1EHM0z8MVc@il0
+R3
 r1
 !s85 0
 31
 !i10b 1
 !s100 kjnOcUEc8SoKAjVzFbeQl2
 IUWg_Hj@lIacA>fF4?Tbo21
-R5
+R4
 S1
 R0
-R6
+R5
 8grader/grader.sv
-Z19 Fgrader/grader.sv
+Z18 Fgrader/grader.sv
 L0 5
+R7
 R8
 R9
 R10
-R11
 !i113 1
+R11
 R12
-R13
 Xgrader_sv_unit
 R1
 R2
@@ -143,91 +143,91 @@ ITzjn<7XT6>mmdgAh>JonE1
 !i103 1
 S1
 R0
-R6
+R5
 8./grader/grader.sv
 F./grader/grader.sv
 L0 4
+R7
 R8
-R9
 !s107 ./grader/grader.sv|
 !s90 -sv|-work|work|./grader/grader.sv|
 !i113 1
+R11
 R12
-R13
 vtestbench
 R1
 R2
-DXx4 work 17 testbench_sv_unit 0 22 B]C6AX;P_0k1CO33Z2C0`2
-R4
+DXx4 work 17 testbench_sv_unit 0 22 CJ^?QcCT;_;fk_IZ_HkHh2
+R3
 r1
 !s85 0
 31
 !i10b 1
-!s100 SeN^N3B@1hhnTR8VlK@8A0
-IkW8kICYezaznKTgWI^>7e0
+!s100 e<O2d_BDHH7i@TY^7Dcga3
+IfbU<MTiZMa>_KF:X8d2GF1
 !s105 testbench_sv_unit
 S1
 R0
-Z20 w1580277099
-Z21 8./hvl/testbench.sv
-Z22 F./hvl/testbench.sv
+Z19 w1580338283
+Z20 8./hvl/testbench.sv
+Z21 F./hvl/testbench.sv
 L0 6
+R7
 R8
-R9
-Z23 !s107 ./hvl/testbench.sv|
-Z24 !s90 -sv|-work|work|./hvl/testbench.sv|
+Z22 !s107 ./hvl/testbench.sv|
+Z23 !s90 -sv|-work|work|./hvl/testbench.sv|
 !i113 1
+R11
 R12
-R13
 Xtestbench_sv_unit
 R1
 R2
-VB]C6AX;P_0k1CO33Z2C0`2
+VCJ^?QcCT;_;fk_IZ_HkHh2
 r1
 !s85 0
 31
 !i10b 1
-!s100 `4<mV0@a@>oSSU3Al[Fl`1
-IB]C6AX;P_0k1CO33Z2C0`2
+!s100 5Zg`GFezG_>?9?8cRNO=22
+ICJ^?QcCT;_;fk_IZ_HkHh2
 !i103 1
 S1
 R0
+R19
 R20
 R21
-R22
 L0 4
+R7
 R8
-R9
+R22
 R23
-R24
 !i113 1
+R11
 R12
-R13
 vtop
 R1
 R2
-R18
-R4
+R17
+R3
 r1
 !s85 0
 31
 !i10b 1
 !s100 Ra[Y?HKm4f>oOSYglYang1
 I=z?13aGJgo@NWO_HR1zGD0
-R5
+R4
 S1
 R0
-R6
-Z25 8./hvl/top.sv
-Z26 F./hvl/top.sv
+R5
+Z24 8./hvl/top.sv
+Z25 F./hvl/top.sv
 L0 5
+R7
 R8
 R9
 R10
-R11
 !i113 1
+R11
 R12
-R13
 Xtop_sv_unit
 R1
 R2
@@ -241,16 +241,16 @@ IJ^JSi`N>1EHM0z8MVc@il0
 !i103 1
 S1
 R0
-R6
+R5
+R24
 R25
-R26
-R7
-R19
+R6
+R18
 L0 4
+R7
 R8
 R9
 R10
-R11
 !i113 1
+R11
 R12
-R13
