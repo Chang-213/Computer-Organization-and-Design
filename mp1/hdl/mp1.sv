@@ -40,7 +40,7 @@ logic [4:0] rs2;
 /*****************************************************************************/
 
 /* Instantiate MP 1 top level blocks here */
-
+//mp1_tb testbench;
 // Keep control named `control` for RVFI Monitor
 control control(.*);
 

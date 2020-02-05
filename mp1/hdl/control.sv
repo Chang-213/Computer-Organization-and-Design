@@ -258,36 +258,36 @@ begin : state_actions
 						loadRegfile(regfilemux::br_en);
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), blt);
-						rs1_addr = rs1;
+						//rs1_addr = rs1;
 					end
 				if(arith_funct3 == sltu)
 					begin
 						loadRegfile(regfilemux::br_en);
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), bltu);
-						rs1_addr = rs1;
+						//rs1_addr = rs1;
 					end
 				if(arith_funct3 == sr && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
 						aluop = alu_sra;
-						rs1_addr = rs1;
+						//rs1_addr = rs1;
 					end
 				else
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
 						aluop = alu_ops'(funct3);
-						rs1_addr = rs1;
+						//rs1_addr = rs1;
 					end
 			end
 		br_state:
 			begin
 				loadPC(pcmux::pcmux_sel_t'(br_en));
 				setALU(alumux::alumux1_sel_t'(1'b1), alumux::alumux2_sel_t'(3'b010), 1'b1, alu_add);
-				rs1_addr = rs1;
-				rs2_addr = rs2;
+				//rs1_addr = rs1;
+				//rs2_addr = rs2;
 			end
 		calc_addr_state:
 			begin
@@ -313,7 +313,7 @@ begin : state_actions
 			begin
 				loadRegfile(regfilemux::regfilemux_sel_t'(4'b0011));
 				load_pc = 1'b1;
-				rs1_addr = rs1;
+				//rs1_addr = rs1;
 			end
 		str1_state:
 			begin
@@ -322,8 +322,8 @@ begin : state_actions
 		str2_state:
 			begin
 				load_pc = 1'b1;
-				rs1_addr = rs1;
-				rs2_addr = rs2;
+				//rs1_addr = rs1;
+				//rs2_addr = rs2;
 			end
 		auipc_state:
 			begin
@@ -335,7 +335,7 @@ begin : state_actions
 			begin
 				loadRegfile(regfilemux::regfilemux_sel_t'(4'b0010));
 				load_pc = 1'b1;
-				rs1_addr = rs1;
+				//rs1_addr = rs1;
 			end
 		//uncomment after CP1
 //		jal_state:
@@ -351,40 +351,40 @@ begin : state_actions
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), blt);
-						rs1_addr = rs1;
-						rs2_addr = rs2;
+						//rs1_addr = rs1;
+						//rs2_addr = rs2;
 					end
 				if(arith_funct3 == sltu)
 					begin
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), bltu);
-						rs1_addr = rs1;
-						rs2_addr = rs2;
+						//rs1_addr = rs1;
+						//rs2_addr = rs2;
 					end
 				if(arith_funct3 == sr && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
 						aluop = alu_sra;
-						rs1_addr = rs1;
-						rs2_addr = rs2;
+						//rs1_addr = rs1;
+						//rs2_addr = rs2;
 					end
 				if(arith_funct3 == add && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
 						aluop = alu_sub;
-						rs1_addr = rs1;
-						rs2_addr = rs2;
+						//rs1_addr = rs1;
+						//rs2_addr = rs2;
 					end
 				else
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
 						aluop = alu_ops'(funct3);
-						rs1_addr = rs1;
-						rs2_addr = rs2;
+						//rs1_addr = rs1;
+						//rs2_addr = rs2;
 					end
 			end
 		csr_state:

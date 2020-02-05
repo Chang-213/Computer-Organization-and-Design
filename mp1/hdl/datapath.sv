@@ -142,7 +142,7 @@ cmp CMP(
 /*****************************************************************************/
 
 /******************************* REGFILE *************************************/
-regfile REGFILE(
+regfile regfile(
 	.clk,
 	.rst,
 	.load (load_regfile),
@@ -172,7 +172,7 @@ regfile REGFILE(
 mux2 PCMUX(
 	.clk,
 	.rst,
-	.select (pcmux_sel),
+	.select (pcmux_sel[0]),
 	.in0 (pc_plus4_out),
 	.in1 (alu_out),
 	.out (pcmux_out)
@@ -208,7 +208,7 @@ mux2 ALUMUX1(
 mux4 ALUMUX2(
 	.clk,
 	.rst,
-	.select (alumux2_sel),
+	.select (alumux2_sel[1:0]),
 	.in0 (i_imm),
 	.in1 (u_imm),
 	.in2 (b_imm),
@@ -219,9 +219,9 @@ mux4 ALUMUX2(
 mux4 REGMUX(
 	.clk,
 	.rst,
-	.select (regfilemux_sel),
+	.select (regfilemux_sel[1:0]),
 	.in0 (alu_out),
-	.in1 (br_en),
+	.in1 ({{31{1'b0}}, br_en}),
 	.in2 (u_imm),
 	.in3 (mdrreg_out),
 	.out (regfilemux_out)
