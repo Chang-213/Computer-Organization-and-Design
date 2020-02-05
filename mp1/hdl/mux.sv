@@ -21,7 +21,7 @@ module mux4 #(parameter width = 32)
 (
 	input clk,
    input rst,
-   input select,
+   input [1:0]select,
    input [width-1:0] in0, in1, in2, in3,
    output logic [width-1:0] out
 );
