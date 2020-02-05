@@ -237,7 +237,7 @@ begin : state_actions
 	 case(state)
 		fetch1_state:
 			begin
-				loadMAR(marmux::alu_out);
+				load_mar = 1'b1;
 			end
 		fetch2_state:
 			begin
@@ -512,6 +512,12 @@ end
 always_ff @(posedge clk)
 begin: next_state_assignment
     /* Assignment of next state on clock edge */
+	 if(rst)
+		begin
+			state <= fetch1_state;
+			//set_defaults();
+		end
+	else
 	 state <= next_states;
 end
 
