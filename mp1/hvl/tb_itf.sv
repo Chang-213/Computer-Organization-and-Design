@@ -30,7 +30,7 @@ initial mem_rdata = 32'h013;
 modport tb(
     input clk, rst, mem_resp, mem_rdata, halt, registers,
     output mem_read, mem_write, mem_byte_enable, mem_address,
-            mem_wdata
+            mem_wdata, clocking mcb
 );
 
 clocking mcb @(posedge clk);
