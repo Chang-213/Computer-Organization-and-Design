@@ -35,15 +35,15 @@ module datapath
 	 output rv32i_opcode opcode,
 	 output [2:0] funct3,
 	 output [6:0] funct7,
-	 output br_en
-//	 output [4:0] rs1,
-//	 output [4:0] rs2
+	 output br_en,
+	 output [4:0] rs1,
+	 output [4:0] rs2
     
 );
 
 /******************* Signals Needed for RVFI Monitor *************************/
-rv32i_reg rs1;
-rv32i_reg rs2;
+//rv32i_reg rs1;
+//rv32i_reg rs2;
 rv32i_reg rd;
 
 rv32i_word rs1_out;
