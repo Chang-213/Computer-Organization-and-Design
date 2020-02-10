@@ -69,8 +69,8 @@ begin : trap_check
         op_load: begin
             case (load_funct3)
                 lw: rmask = 4'b1111;
-                lh, lhu: rmask = 4'bXXXX /* Modify for MP1 Final */ ;
-                lb, lbu: rmask = 4'bXXXX /* Modify for MP1 Final */ ;
+                lh, lhu: rmask = 4'b0011 /* Modify for MP1 Final */ ;
+                lb, lbu: rmask = 4'b0001 /* Modify for MP1 Final */ ;
                 default: trap = 1;
             endcase
         end
@@ -78,8 +78,8 @@ begin : trap_check
         op_store: begin
             case (store_funct3)
                 sw: wmask = 4'b1111;
-                sh: wmask = 4'bXXXX /* Modify for MP1 Final */ ;
-                sb: wmask = 4'bXXXX /* Modify for MP1 Final */ ;
+                sh: wmask = 4'b0011 /* Modify for MP1 Final */ ;
+                sb: wmask = 4'b0001 /* Modify for MP1 Final */ ;
                 default: trap = 1;
             endcase
         end
@@ -346,12 +346,16 @@ begin : state_actions
 				//rs1_addr = rs1;
 			end
 		//uncomment after CP1
-//		jal_state:
-//			begin
-//			end
-//		jalr_state:
-//			begin
-//			end
+		jal_state:
+			begin
+				setALU(alumux::alumux1_sel_t'(1'b1), alumux::alumux2_sel_t'(3'b100), 1'b1, alu_add);
+				loadPC(pcmux::pcmux_sel_t'(2'b10));
+			end
+		jalr_state:
+			begin
+				setALU(alumux::alumux1_sel_t'(1'b0), alumux::alumux2_sel_t'(3'b000), 1'b1, alu_add);
+				loadPC(pcmux::pcmux_sel_t'(2'b00));
+			end
 		reg_state:
 			begin
 				//SLT
@@ -517,12 +521,14 @@ begin : next_state_logic
 				next_states = fetch1_state;
 			end
 		//uncomment after CP1
-//		jal_state:
-//			begin
-//			end
-//		jalr_state:
-//			begin
-//			end
+		jal_state:
+			begin
+				next_states = fetch1_state;
+			end
+		jalr_state:
+			begin
+				next_states = fetch1_state;
+			end
 	endcase
 end
 
