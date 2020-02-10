@@ -11,6 +11,7 @@ module control
     input logic br_en,
     input logic [4:0] rs1,
     input logic [4:0] rs2,
+	 //input logic [4:0] rd,
 	 input logic mem_resp,
 	 output logic mem_read,
 	 output logic mem_write,
@@ -164,21 +165,25 @@ enum int unsigned {
 function void set_defaults();
 	 mem_read = 1'b0;
 	 mem_write = 1'b0;
-	 mem_byte_enable = 4'b0000;
+	 mem_byte_enable = 4'b1111;
     load_pc = 1'b0;
     load_ir = 1'b0;
     load_regfile = 1'b0;
     load_mar = 1'b0;
     load_mdr = 1'b0;
     load_data_out = 1'b0;
-	 cmpop = beq;
-	 aluop = alu_add;
+	 cmpop = branch_funct3;
+	 aluop = alu_ops'(funct3);
+	 //cmpop = beq;
+	 //aluop = alu_add;
 	 pcmux_sel = pcmux::pc_plus4;
     alumux1_sel = alumux::rs1_out;
     alumux2_sel = alumux::i_imm;
     regfilemux_sel = regfilemux::alu_out;
     marmux_sel = marmux::pc_out;
     cmpmux_sel = cmpmux::rs2_out;
+	 //rs1 = 5'b0;
+	 //rs2 = 5'b0;
 endfunction
 
 /**
@@ -253,21 +258,24 @@ begin : state_actions
 			end
 		s_imm_state:
 			begin
+				//SLTI
 				if(arith_funct3 == slt)
 					begin
-						loadRegfile(regfilemux::br_en);
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), blt);
 						//rs1_addr = rs1;
 					end
-				if(arith_funct3 == sltu)
+				//SLTUI
+				else if(arith_funct3 == sltu)
 					begin
-						loadRegfile(regfilemux::br_en);
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), bltu);
 						//rs1_addr = rs1;
 					end
-				if(arith_funct3 == sr && funct7[5] == 1)
+				//SRAI
+				else if(arith_funct3 == sr && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
@@ -346,34 +354,42 @@ begin : state_actions
 //			end
 		reg_state:
 			begin
+				//SLT
 				if(arith_funct3 == slt)
 					begin
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
+						alumux2_sel = alumux::rs2_out;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), blt);
 						//rs1_addr = rs1;
 						//rs2_addr = rs2;
 					end
-				if(arith_funct3 == sltu)
+				//SLTU
+				else if(arith_funct3 == sltu)
 					begin
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0001));
 						load_pc = 1'b1;
+						alumux2_sel = alumux::rs2_out;
 						setCMP(cmpmux::cmpmux_sel_t'(1'b1), bltu);
 						//rs1_addr = rs1;
 						//rs2_addr = rs2;
 					end
-				if(arith_funct3 == sr && funct7[5] == 1)
+				//SRA
+				else if(arith_funct3 == sr && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
+						alumux2_sel = alumux::rs2_out;
 						aluop = alu_sra;
 						//rs1_addr = rs1;
 						//rs2_addr = rs2;
 					end
-				if(arith_funct3 == add && funct7[5] == 1)
+				//SUB
+				else if(arith_funct3 == add && funct7[5] == 1)
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
+						alumux2_sel = alumux::rs2_out;
 						aluop = alu_sub;
 						//rs1_addr = rs1;
 						//rs2_addr = rs2;
@@ -382,6 +398,7 @@ begin : state_actions
 					begin
 						load_regfile = 1'b1;
 						load_pc = 1'b1;
+						alumux2_sel = alumux::rs2_out;
 						aluop = alu_ops'(funct3);
 						//rs1_addr = rs1;
 						//rs2_addr = rs2;

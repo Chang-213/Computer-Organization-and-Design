@@ -38,6 +38,7 @@ module datapath
 	 output br_en,
 	 output [4:0] rs1,
 	 output [4:0] rs2
+	 //output [4:0] rd
     
 );
 
@@ -60,9 +61,15 @@ rv32i_word regfilemux_out;
 rv32i_word marmux_out;
 rv32i_word cmp_mux_out;
 rv32i_word alu_out;
+rv32i_word alu_mod2;
 rv32i_word pc_out;
 rv32i_word pc_plus4_out;
 rv32i_word mdrreg_out;
+rv32i_word br_en_regmux;
+rv32i_word lb;
+rv32i_word lbu;
+rv32i_word lh;
+rv32i_word lhu;
 
 /*****************************************************************************/
 
@@ -70,21 +77,21 @@ rv32i_word mdrreg_out;
 /***************************** Registers *************************************/
 // Keep Instruction register named `IR` for RVFI Monitor
 ir IR(
-	.clk,
-	.rst,
+	.clk (clk),
+	.rst (rst),
 	.load (load_ir),
 	.in (mdrreg_out),
-	.funct3,
-	.funct7,
-	.opcode,
-	.i_imm,
-	.s_imm,
-	.b_imm,
-	.u_imm,
-	.j_imm,
-	.rs1,
-	.rs2,
-	.rd
+	.funct3 (funct3),
+	.funct7 (funct7),
+	.opcode (opcode),
+	.i_imm (i_imm),
+	.s_imm (s_imm),
+	.b_imm (b_imm),
+	.u_imm (u_imm),
+	.j_imm (j_imm),
+	.rs1 (rs1),
+	.rs2 (rs2),
+	.rd (rd)
 );
 
 register MDR(
@@ -119,7 +126,7 @@ pc_register PC(
     .out  (pc_out)
 );
 
-plus4 PLUS4(
+pc_plus4 PLUS4(
 	.in (pc_out),
 	.out (pc_plus4_out)
 );
@@ -169,12 +176,13 @@ regfile regfile(
         //default: `BAD_MUX_SEL;
     //endcase
 //end
-mux2 PCMUX(
+mux3 PCMUX(
 	.clk,
 	.rst,
-	.select (pcmux_sel[0]),
+	.select (pcmux_sel),
 	.in0 (pc_plus4_out),
 	.in1 (alu_out),
+	.in2 (alu_mod2),
 	.out (pcmux_out)
 );
 
@@ -205,25 +213,37 @@ mux2 ALUMUX1(
 	.out (alumux1_out)
 );
 
-mux4 ALUMUX2(
+mux6 ALUMUX2(
 	.clk,
 	.rst,
-	.select (alumux2_sel[1:0]),
+	.select (alumux2_sel),
 	.in0 (i_imm),
 	.in1 (u_imm),
 	.in2 (b_imm),
 	.in3 (s_imm),
+	.in4 (j_imm),
+	.in5 (rs2_out),
 	.out (alumux2_out)
 );
 
-mux4 REGMUX(
+zext BR_EN_ZEXT(
+	.in (br_en),
+	.out (br_en_regmux)
+);
+
+mux9 REGMUX(
 	.clk,
 	.rst,
-	.select (regfilemux_sel[1:0]),
+	.select (regfilemux_sel),
 	.in0 (alu_out),
-	.in1 ({{31{1'b0}}, br_en}),
+	.in1 (br_en_regmux),
 	.in2 (u_imm),
 	.in3 (mdrreg_out),
+	.in4 (pc_plus4_out),
+	.in5 (lb),
+	.in6 (lbu),
+	.in7 (lh),
+	.in8 (lhu),
 	.out (regfilemux_out)
 );
 

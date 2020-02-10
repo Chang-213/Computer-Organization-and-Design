@@ -37,6 +37,7 @@ logic [6:0] funct7;
 logic br_en;
 logic[4:0] rs1;
 logic [4:0] rs2;
+logic [4:0] rd;
 /*****************************************************************************/
 
 /* Instantiate MP 1 top level blocks here */
