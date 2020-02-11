@@ -319,13 +319,56 @@ begin : state_actions
 			end
 		ldr2_state:
 			begin
-				loadRegfile(regfilemux::regfilemux_sel_t'(4'b0011));
-				load_pc = 1'b1;
+				if(load_funct3 == lb)
+					begin
+						//mem_byte_enable = 4'b0001;
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0101));
+						load_pc = 1'b1;
+					end
+				else if(load_funct3 == lh)
+					begin
+						//mem_byte_enable = 4'b0011;
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0111));
+						load_pc = 1'b1;
+					end
+				else if(load_funct3 == lw)
+					begin
+						//mem_byte_enable = 4'b1111;
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0011));
+						load_pc = 1'b1;
+					end
+				else if(load_funct3 == lbu)
+					begin
+						//mem_byte_enable = 4'b0001;
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0110));
+						load_pc = 1'b1;
+					end
+				//lhu
+				else
+					begin
+						//mem_byte_enable = 4'b0011;
+						loadRegfile(regfilemux::regfilemux_sel_t'(4'b1000));
+						load_pc = 1'b1;
+					end
 				//rs1_addr = rs1;
 			end
 		str1_state:
 			begin
-				mem_write = 1'b1;
+				if (store_funct3 == sb)
+					begin
+					mem_byte_enable = wmask;
+					mem_write = 1'b1;
+					end
+				else if (store_funct3 == sh)
+					begin
+					mem_byte_enable = wmask;
+					mem_write = 1'b1;
+					end
+				else
+					begin
+					mem_byte_enable = wmask;
+					mem_write = 1'b1;
+					end
 			end
 		str2_state:
 			begin
@@ -349,12 +392,12 @@ begin : state_actions
 		jal_state:
 			begin
 				setALU(alumux::alumux1_sel_t'(1'b1), alumux::alumux2_sel_t'(3'b100), 1'b1, alu_add);
-				loadPC(pcmux::pcmux_sel_t'(2'b10));
+				loadPC(pcmux::pcmux_sel_t'(2'b01));
 			end
 		jalr_state:
 			begin
 				setALU(alumux::alumux1_sel_t'(1'b0), alumux::alumux2_sel_t'(3'b000), 1'b1, alu_add);
-				loadPC(pcmux::pcmux_sel_t'(2'b00));
+				loadPC(pcmux::pcmux_sel_t'(2'b01));
 			end
 		reg_state:
 			begin
@@ -410,6 +453,7 @@ begin : state_actions
 			end
 		csr_state:
 			begin
+			load_pc = 1'b1;
 			end
 	endcase
 end

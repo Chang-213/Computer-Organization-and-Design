@@ -66,10 +66,14 @@ rv32i_word pc_out;
 rv32i_word pc_plus4_out;
 rv32i_word mdrreg_out;
 rv32i_word br_en_regmux;
-rv32i_word lb;
-rv32i_word lbu;
-rv32i_word lh;
-rv32i_word lhu;
+rv32i_word lh_out;
+rv32i_word lhu_out;
+rv32i_word lb_out;
+rv32i_word lbu_out;
+//rv32i_word lb;
+//rv32i_word lbu;
+//rv32i_word lh;
+//rv32i_word lhu;
 
 /*****************************************************************************/
 
@@ -134,14 +138,14 @@ pc_plus4 PLUS4(
 
 /******************************* ALU and CMP *********************************/
 alu ALU(
-	.aluop,
+	.aluop (aluop),
 	.a (alumux1_out),
 	.b (alumux2_out),
 	.f (alu_out)
 );
 
 cmp CMP(
-	.cmpop,
+	.cmpop (cmpop),
 	.a (rs1_out),
 	.b (cmp_mux_out),
 	.f (br_en)
@@ -231,6 +235,30 @@ zext BR_EN_ZEXT(
 	.out (br_en_regmux)
 );
 
+lh LH(
+	.in0 (mdrreg_out),
+	.mem_address (mem_address),
+	.out (lh_out)
+);
+
+lhu LHU(
+	.in0 (mdrreg_out),
+	.mem_address (mem_address),
+	.out (lhu_out)
+);
+
+lb LB(
+	.in0 (mdrreg_out),
+	.mem_address (mem_address),
+	.out (lb_out)
+);
+
+lbu LBU(
+	.in0 (mdrreg_out),
+	.mem_address (mem_address),
+	.out (lbu_out)
+);
+
 mux9 REGMUX(
 	.clk,
 	.rst,
@@ -238,12 +266,12 @@ mux9 REGMUX(
 	.in0 (alu_out),
 	.in1 (br_en_regmux),
 	.in2 (u_imm),
-	.in3 (mdrreg_out),
+	.in3 (mdrreg_out),	//lw
 	.in4 (pc_plus4_out),
-	.in5 (lb),
-	.in6 (lbu),
-	.in7 (lh),
-	.in8 (lhu),
+	.in5 (lb_out),	//lb
+	.in6 (lbu_out),	//lbu
+	.in7 (lh_out),	//lh
+	.in8 (lhu_out),	//lhu
 	.out (regfilemux_out)
 );
 
