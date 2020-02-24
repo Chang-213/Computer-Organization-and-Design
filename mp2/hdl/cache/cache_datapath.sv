@@ -115,11 +115,6 @@ module cache_datapath #(
 		.out (pmem_address)
 	 );
 	 
-	 //assign valid_bit = lru_out == 1 ? valid1_out : valid0_out;
-	 //assign tag_out = lru_out == 1 ? tag1_out : tag0_out;
-	 //assign dirty_bit = lru_out == 1 ? dirty1_out : dirty0_out;
-	 //assign pmem_address = pmem_select == 1 ? {mem_address[31:5], 5'b0} : {tag_out, mem_address[7:5], 5'b0};
-	 
 	 
 	 mux3bit PMEM_WDATA(
 		.clk (clk),
