@@ -68,18 +68,112 @@ begin : trap_check
 
         op_load: begin
             case (load_funct3)
-                lw: rmask = 4'b1111;
-                lh, lhu: rmask = 4'b0011 /* Modify for MP1 Final */ ;
-                lb, lbu: rmask = 4'b0001 /* Modify for MP1 Final */ ;
+                lw:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    rmask = 4'b1111;
+                  else if (alu_out[1:0] == 2'b01)
+                  begin
+                    rmask = 4'b1110;
+                    trap = 1;
+                  end
+                  else if (alu_out[1:0] == 2'b10)
+                  begin
+                    rmask = 4'b1100;
+                    trap = 1;
+                  end
+                  else
+                  begin
+                    rmask = 4'b1000;
+                    trap = 1;
+                  end
+                end
+                lh, lhu:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    rmask = 4'b0011 /* Modify for MP1 Final */ ;
+                  else if(alu_out[1:0] == 2'b01)
+                  begin
+                    rmask = 4'b0110;
+                    trap = 1;
+                  end
+                  else if(alu_out[1:0] == 2'b10)
+                  begin
+                    rmask = 4'b1100;
+                  end
+                  else
+                  begin
+                    rmask = 4'b1000;
+                    trap = 1;
+                  end
+                end
+                lb, lbu:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    rmask = 4'b0001;
+                  else if(alu_out[1:0] == 2'b01)
+                    rmask = 4'b0010;
+                  else if(alu_out[1:0] == 2'b10)
+                    rmask = 4'b0100;
+                  else
+                    rmask = 4'b1000;
+                end
                 default: trap = 1;
             endcase
         end
 
         op_store: begin
             case (store_funct3)
-                sw: wmask = 4'b1111;
-                sh: wmask = 4'b0011 /* Modify for MP1 Final */ ;
-                sb: wmask = 4'b0001 /* Modify for MP1 Final */ ;
+                sw:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    wmask = 4'b1111;
+                  else if(alu_out[1:0] == 2'b01)
+                  begin
+                    wmask = 4'b1110;
+                    trap = 1;
+                  end
+                  else if(alu_out[1:0] == 2'b10)
+                  begin
+                    wmask = 4'b1100;
+                    trap = 1;
+                  end
+                  else
+                  begin
+                    wmask = 4'b1000;
+                    trap = 1;
+                  end
+                end
+                sh:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    wmask = 4'b0011 /* Modify for MP1 Final */ ;
+                  else if(alu_out[1:0] == 2'b01)
+                  begin
+                    wmask = 4'b0110;
+                    trap = 1;
+                  end
+                  else if(alu_out[1:0] == 2'b10)
+                  begin
+                    wmask = 4'b1100;
+                  end
+                  else
+                  begin
+                    wmask = 4'b1000;
+                    trap = 1;
+                  end
+                end
+                sb:
+                begin
+                  if(alu_out[1:0] == 2'b00)
+                    wmask = 4'b0001;
+                  else if(alu_out[1:0] == 2'b01)
+                    wmask = 4'b0010;
+                  else if(alu_out[1:0] == 2'b10)
+                    wmask = 4'b0100;
+                  else
+                    wmask = 4'b1000;
+                end
                 default: trap = 1;
             endcase
         end
@@ -95,41 +189,44 @@ enum int unsigned {
 	 fetch2_state,
 	 fetch3_state,
 	 decode_state,
-	 
+
 	 //SLTI, SLTIU, SRAI, Other
 	 s_imm_state,
-	  
+
 	 //br
 	 br_state,
-	 
+
 	 //Calculate Address
 	 calc_addr_state,
-	 
+
+   //deal with non-aligned
+   corrected_state,
+
 	 //LW
 	 ldr1_state,
 	 ldr2_state,
-	 
+
 	 //SW
 	 str1_state,
 	 str2_state,
-	 
+
 	 //AUIPC
 	 auipc_state,
-	 
+
 	 //LUI
 	 lui_state,
-	 
+
 	 //jump
 	 jal_state,
 	 jalr_state,
-	 
-	 
+
+
 	 //register to register
 	 reg_state,
 
 	 //csr
 	 csr_state
-	 
+
 	 //arithmatic
 //	 	add_state,
 //		slt_state,
@@ -141,7 +238,7 @@ enum int unsigned {
 //		srl_state,
 //		sub_state,
 //		sra_state
-	 
+
 } state, next_states;
 
 /************************* Function Definitions *******************************/
@@ -151,7 +248,7 @@ enum int unsigned {
  *  function, then you only need to ensure that you set the load_regfile bit
  *  to 1'b1 in one place, rather than in many.
  *
- *  SystemVerilog functions must take zero "simulation time" (as opposed to 
+ *  SystemVerilog functions must take zero "simulation time" (as opposed to
  *  tasks).  Thus, they are generally synthesizable, and appropraite
  *  for design code.  Arguments to functions are, by default, input.  But
  *  may be passed as outputs, inouts, or by reference using the `ref` keyword.
@@ -207,7 +304,7 @@ endfunction
 
 function void loadMDR();
 	load_mdr = 1'b1;
-	
+
 endfunction
 
 /**
@@ -303,6 +400,7 @@ begin : state_actions
 					begin
 						aluop = alu_add;
 						loadMAR(marmux::marmux_sel_t'(1'b1));
+            mem_byte_enable = rmask;
 					end
 				else
 					begin
@@ -310,12 +408,22 @@ begin : state_actions
 						aluop = alu_add;
 						loadMAR(marmux::marmux_sel_t'(1'b1));
 						load_data_out = 1'b1;
+            mem_byte_enable = wmask;
 					end
 			end
+    corrected_state:
+      begin
+        alumux2_sel = alumux::alumux2_sel_t'(3'b011);
+        aluop = alu_add;
+        load_data_out = 1'b1;
+        mem_byte_enable = wmask;
+      end
 		ldr1_state:
 			begin
 				load_mdr = 1'b1;
 				mem_read = 1'b1;
+        aluop = alu_add;
+        mem_byte_enable = rmask;
 			end
 		ldr2_state:
 			begin
@@ -324,24 +432,32 @@ begin : state_actions
 						//mem_byte_enable = 4'b0001;
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0101));
 						load_pc = 1'b1;
+            aluop = alu_add;
+            mem_byte_enable = rmask;
 					end
 				else if(load_funct3 == lh)
 					begin
 						//mem_byte_enable = 4'b0011;
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0111));
 						load_pc = 1'b1;
+            aluop = alu_add;
+            mem_byte_enable = rmask;
 					end
 				else if(load_funct3 == lw)
 					begin
 						//mem_byte_enable = 4'b1111;
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0011));
 						load_pc = 1'b1;
+            aluop = alu_add;
+            mem_byte_enable = rmask;
 					end
 				else if(load_funct3 == lbu)
 					begin
 						//mem_byte_enable = 4'b0001;
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b0110));
 						load_pc = 1'b1;
+            aluop = alu_add;
+            mem_byte_enable = rmask;
 					end
 				//lhu
 				else
@@ -349,6 +465,8 @@ begin : state_actions
 						//mem_byte_enable = 4'b0011;
 						loadRegfile(regfilemux::regfilemux_sel_t'(4'b1000));
 						load_pc = 1'b1;
+            aluop = alu_add;
+            mem_byte_enable = rmask;
 					end
 				//rs1_addr = rs1;
 			end
@@ -358,21 +476,29 @@ begin : state_actions
 					begin
 					mem_byte_enable = wmask;
 					mem_write = 1'b1;
+          alumux2_sel = alumux::alumux2_sel_t'(3'b011);
+          aluop = alu_add;
 					end
 				else if (store_funct3 == sh)
 					begin
 					mem_byte_enable = wmask;
 					mem_write = 1'b1;
+          alumux2_sel = alumux::alumux2_sel_t'(3'b011);
+          aluop = alu_add;
 					end
 				else
 					begin
 					mem_byte_enable = wmask;
 					mem_write = 1'b1;
+          alumux2_sel = alumux::alumux2_sel_t'(3'b011);
+          aluop = alu_add;
 					end
 			end
 		str2_state:
 			begin
 				load_pc = 1'b1;
+        alumux2_sel = alumux::alumux2_sel_t'(3'b011);
+        aluop = alu_add;
 				//rs1_addr = rs1;
 				//rs2_addr = rs2;
 			end
@@ -391,13 +517,15 @@ begin : state_actions
 		//uncomment after CP1
 		jal_state:
 			begin
+        loadRegfile(regfilemux::regfilemux_sel_t'(4'b0100));
 				setALU(alumux::alumux1_sel_t'(1'b1), alumux::alumux2_sel_t'(3'b100), 1'b1, alu_add);
 				loadPC(pcmux::pcmux_sel_t'(2'b01));
 			end
 		jalr_state:
 			begin
+        loadRegfile(regfilemux::regfilemux_sel_t'(4'b0100));
 				setALU(alumux::alumux1_sel_t'(1'b0), alumux::alumux2_sel_t'(3'b000), 1'b1, alu_add);
-				loadPC(pcmux::pcmux_sel_t'(2'b01));
+				loadPC(pcmux::pcmux_sel_t'(2'b10));
 			end
 		reg_state:
 			begin
@@ -463,7 +591,7 @@ begin : next_state_logic
     /* Next state information and conditions (if any)
      * for transitioning between states */
 	  next_states = state;
-	  
+
 	  case(state)
 		fetch1_state:
 			begin
@@ -521,11 +649,15 @@ begin : next_state_logic
 			end
 		calc_addr_state:
 			begin
-				if(opcode == op_load)
-					next_states = ldr1_state;
-				else
-					next_states = str1_state;
+					next_states = corrected_state;
 			end
+    corrected_state:
+      begin
+        if(opcode == op_load)
+          next_states = ldr1_state;
+        else
+          next_states = str1_state;
+      end
 		ldr1_state:
 			begin
 				if(mem_resp == 0)

@@ -6,7 +6,7 @@ module datapath
 (
     input clk,
 	 input rst,
-	 
+
 	 //Control to Datapath
 	 input load_pc,
 	 input load_ir,
@@ -22,24 +22,25 @@ module datapath
 	 input marmux::marmux_sel_t marmux_sel,
 	 input cmpmux::cmpmux_sel_t cmpmux_sel,
 	 input alu_ops aluop,
-	 
+
 	 //Memory to Datapath
 	 input rv32i_word mem_rdata,
-	 
+
 	 //Datapath to Memory
 	 output rv32i_word mem_address,
 	 output rv32i_word mem_wdata,
-	 
-	 
+
+
 	 //Datapath to Control
 	 output rv32i_opcode opcode,
+   output rv32i_word alu_out,
 	 output [2:0] funct3,
 	 output [6:0] funct7,
 	 output br_en,
 	 output [4:0] rs1,
 	 output [4:0] rs2
 	 //output [4:0] rd
-    
+
 );
 
 /******************* Signals Needed for RVFI Monitor *************************/
@@ -60,7 +61,7 @@ rv32i_word alumux2_out;
 rv32i_word regfilemux_out;
 rv32i_word marmux_out;
 rv32i_word cmp_mux_out;
-rv32i_word alu_out;
+// rv32i_word alu_out;
 rv32i_word alu_mod2;
 rv32i_word pc_out;
 rv32i_word pc_plus4_out;
@@ -70,11 +71,12 @@ rv32i_word lh_out;
 rv32i_word lhu_out;
 rv32i_word lb_out;
 rv32i_word lbu_out;
+rv32i_word lw_out;
 //rv32i_word lb;
 //rv32i_word lbu;
 //rv32i_word lh;
 //rv32i_word lhu;
-
+rv32i_word corrected;
 /*****************************************************************************/
 
 
@@ -118,7 +120,7 @@ register MEM_DATA_OUT(
 	.clk (clk),
    .rst (rst),
    .load (load_data_out),
-   .in   (rs2_out),
+   .in   (corrected),
    .out  (mem_wdata)
 );
 
@@ -171,7 +173,7 @@ regfile regfile(
     // We provide one (incomplete) example of a mux instantiated using
     // a case statement.  Using enumerated types rather than bit vectors
     // provides compile time type safety.  Defensive programming is extremely
-    // useful in SystemVerilog.  In this case, we actually use 
+    // useful in SystemVerilog.  In this case, we actually use
     // Offensive programming --- making simulation halt with a fatal message
     // warning when an unexpected mux select value occurs
     //unique case (pcmux_sel)
@@ -186,7 +188,7 @@ mux3 PCMUX(
 	.select (pcmux_sel),
 	.in0 (pc_plus4_out),
 	.in1 (alu_out),
-	.in2 (alu_mod2),
+	.in2 ({alu_out[31:1], 1'b0}),
 	.out (pcmux_out)
 );
 
@@ -203,9 +205,20 @@ mux2 MARMUX(
 	.clk,
 	.rst,
 	.select (marmux_sel),
-	.in0 (pc_out),
-	.in1 (alu_out),
+	.in0 ({pc_out[31:2], 2'b0}),
+	.in1 ({alu_out[31:2], 2'b0}),
 	.out (marmux_out)
+);
+
+mux4 correctedpath(
+  .clk,
+  .rst,
+  .select (alu_out[1:0]),
+  .in0 (rs2_out),
+  .in1 (rs2_out << 8),
+  .in2 (rs2_out << 16),
+  .in3 (rs2_out << 24),
+  .out (corrected)
 );
 
 mux2 ALUMUX1(
@@ -237,26 +250,32 @@ zext BR_EN_ZEXT(
 
 lh LH(
 	.in0 (mdrreg_out),
-	.mem_address (mem_address),
+	.select (alu_out[1:0])
 	.out (lh_out)
 );
 
 lhu LHU(
 	.in0 (mdrreg_out),
-	.mem_address (mem_address),
+	.select (alu_out[1:0])
 	.out (lhu_out)
 );
 
 lb LB(
 	.in0 (mdrreg_out),
-	.mem_address (mem_address),
+	.select (alu_out[1:0])
 	.out (lb_out)
 );
 
 lbu LBU(
 	.in0 (mdrreg_out),
-	.mem_address (mem_address),
+	.select (alu_out[1:0])
 	.out (lbu_out)
+);
+
+lw LW(
+  .in0 (mdrreg_out)
+  .select (alu_out[1:0])
+  .out (lw_out)
 );
 
 mux9 REGMUX(
@@ -266,7 +285,7 @@ mux9 REGMUX(
 	.in0 (alu_out),
 	.in1 (br_en_regmux),
 	.in2 (u_imm),
-	.in3 (mdrreg_out),	//lw
+	.in3 (lw_out),	//lw
 	.in4 (pc_plus4_out),
 	.in5 (lb_out),	//lb
 	.in6 (lbu_out),	//lbu

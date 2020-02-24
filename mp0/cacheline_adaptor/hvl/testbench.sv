@@ -60,6 +60,9 @@ module testbench;
         static bit [255:0] readline;
         static bit [4:0] delay;
         @(cb iff ~(cb.read_o | cb.write_o));
+
+
+
         cb.read_i <= 1'b1;
         cb.write_i <= 1'b0;
         cb.reset_n <= 1'b1;
@@ -69,6 +72,9 @@ module testbench;
         end
         delay = $urandom;
         @(cb iff cb.read_o);
+
+
+
         repeat (delay) begin
             assert(cb.address_o == address_i) else begin
                 $sformat(s, "@%0t TB: mismatch in read addresses", $time);
@@ -76,14 +82,21 @@ module testbench;
             end
             ##1;
         end
+
+
+
         for (it = 0; it < 4; ++it) begin
             cb.resp_i <= 1'b1;
             cb.burst_i <= readline[64*it +: 64];
             cb.read_i <= 1'b0;
             ##1;
         end
+
         cb.resp_i <= 1'b0;
         @(cb iff cb.resp_o);
+
+
+
         repeat (5) begin
             assert(cb.line_o == readline) else begin
                 $sformat(s, "@%0t TB: read / expected\n\t%x\n\t%x", $time,
@@ -97,7 +110,10 @@ module testbench;
     task write_test;
         static integer it;
         static bit [4:0] delay;
+
         @(cb iff ~(cb.read_o | cb.write_o));
+
+
         cb.read_i <= 1'b0;
         cb.write_i <= 1'b1;
         cb.reset_n <= 1'b1;
@@ -107,6 +123,7 @@ module testbench;
         end
         delay = $urandom;
         @(cb iff cb.write_o);
+
         for (int it = 0; it < delay; ++it) begin
             assert(cb.address_o == address_i) else begin
                 $sformat(s, "@%0t TB: mismatch in read addresses", $time);
@@ -115,6 +132,9 @@ module testbench;
             ##1;
         end
         ##1 cb.resp_i <= 1'b1;
+
+        
+
         for (it = 0; it < 4; ++it) begin
             ##1;
             cb.resp_i <= 1'b1;
