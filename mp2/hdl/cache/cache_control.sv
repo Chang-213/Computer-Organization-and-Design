@@ -42,6 +42,9 @@ enum int unsigned {
 	 READ,
 	 READ_MISS_LOAD,
 	 READ_EVIC,
+	 WRITE,
+	 WRITE_MISS_LOAD,
+	 WRITE_EVIC,
 	 END
 
 } state, next_states;
@@ -90,6 +93,45 @@ begin : state_actions
 		end
 	READ_EVIC:
 		pmem_write = 1;
+	WRITE:
+		begin
+			lru_load = 1;
+			dirty_select = 1;
+			if(hit0 == 1 && hit1 == 0)
+				begin
+				dirty_load0 = 1;
+				end
+			else
+				begin
+				dirty_load1 = 1;
+				end
+		end
+	WRITE_MISS_LOAD:
+		begin
+		pmem_write = 1;
+		pmem_select = 0;
+		data_select = 0;
+		if(lru_out)
+		begin
+			valid_load1 = 1;
+			tag_load1 = 1;
+			write1_select = 2'b01;
+		end
+		else
+		begin
+			valid_load0 = 1;
+			tag_load0 = 1;
+			write0_select = 2'b01;
+		end
+		end
+	WRITE_EVIC:
+		begin
+			pmem_write = 1;
+			if(lru_out)
+				dirty_load1 = 1;
+			else
+				dirty_load0 = 1;
+		end
 	END:
 		mem_resp = 1;
 	endcase
@@ -103,6 +145,8 @@ begin : next_state
 		begin
 		if(read_array == 1)
 			next_states = READ;
+		else if (write_array == 1)
+			next_states = WRITE;
 		else
 			next_states = RESET;
 		end
@@ -126,6 +170,27 @@ begin : next_state
 			next_states = READ_MISS_LOAD;
 		else
 			next_states = READ_EVIC;
+		end
+	WRITE:
+		begin
+		if (valid_bit && hit1 == 0 && hit0 == 0 && dirty_bit)
+			next_states = WRITE_EVIC;
+		else
+			next_states = WRITE_MISS_LOAD;
+		end
+	WRITE_MISS_LOAD:
+		begin
+		if(pmem_resp  && valid_bit && ({hit1,hit0} != 2'b00))
+			next_states = END;
+		else
+			next_states = WRITE_MISS_LOAD;
+		end
+	WRITE_EVIC:
+		begin
+		if(pmem_resp)
+			next_states = WRITE_MISS_LOAD;
+		else
+			next_states = WRITE_EVIC;
 		end
 	END:
 		begin

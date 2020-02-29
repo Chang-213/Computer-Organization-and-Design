@@ -89,17 +89,16 @@ begin : states
         read_o = read_i;
         write_o = write_i;
         address_o = address_i;
-		  if(resp_i == 1 && write_o == 0)
+		  if(resp_i == 1 && read_o == 1)
 			begin
 				line_o[64*counter +: 64] = burst_i;
             counterflag++;
 			end
-        else if(write_o == 1)
+        else if(resp_i == 1 && write_o == 1)
           begin
             burst_o = line_i[64*counter +: 64];
             counterflag++;
           end
-			
         end
       burst_1:
         begin
@@ -108,7 +107,7 @@ begin : states
             line_o[64*counter +: 64] = burst_i;
             counterflag++;
           end
-          if(write_o == 1)
+          else if(write_o == 1)
           begin
             burst_o = line_i[64*counter +: 64];
             counterflag++;
@@ -121,7 +120,7 @@ begin : states
             line_o[64*counter +: 64] = burst_i;
             counterflag++;
           end
-          if(write_o == 1)
+          else if(write_o == 1)
           begin
             burst_o = line_i[64*counter +: 64];
             counterflag++;
@@ -134,9 +133,11 @@ begin : states
             line_o[64*counter +: 64] = burst_i;
             counterflag++;
            end
-           if(write_o == 1)
+           else if(write_o == 1)
            begin
              burst_o = line_i[64*counter +: 64];
+				 resp_o = 1;
+				 write_o = 0;
              counterflag++;
            end
         end
@@ -184,19 +185,19 @@ begin : next_state_logic
         end
       burst_1:
         begin
-          if((read_o == 1) || (write_o == 0))
+          if((read_o == 1) || (write_o == 1))
           next_states = burst_2;
         end
       burst_2:
         begin
-          if((read_o == 1) || (write_o == 0))
+          if((read_o == 1) || (write_o == 1))
           next_states = burst_3;
         end
       burst_3:
         begin
 			 if (counter == 3)
 			 next_states  = last;
-          else if((read_o == 1) || (write_o == 0))
+          else if((read_o == 1) || (write_o == 1))
           next_states = burst_4;
         end
       burst_4:
