@@ -92,7 +92,13 @@ begin : state_actions
 		end
 		end
 	READ_EVIC:
+		begin
 		pmem_write = 1;
+		if(lru_out)
+			dirty_load1 = 1;
+		else
+			dirty_load0 = 1;
+		end
 	WRITE:
 		begin
 			lru_load = 1;
@@ -100,10 +106,12 @@ begin : state_actions
 			if(hit0 == 1 && hit1 == 0)
 				begin
 				dirty_load0 = 1;
+				write0_select = 2'b01;
 				end
 			else
 				begin
 				dirty_load1 = 1;
+				write1_select = 2'b01;
 				end
 		end
 	WRITE_MISS_LOAD:
@@ -115,13 +123,13 @@ begin : state_actions
 		begin
 			valid_load1 = 1;
 			tag_load1 = 1;
-			write1_select = 2'b01;
+			write1_select = 2'b10;
 		end
 		else
 		begin
 			valid_load0 = 1;
 			tag_load0 = 1;
-			write0_select = 2'b01;
+			write0_select = 2'b10;
 		end
 		end
 	WRITE_EVIC:
@@ -152,7 +160,9 @@ begin : next_state
 		end
 	READ:
 		begin
-		if (valid_bit && hit1 == 0 && hit0 == 0 && dirty_bit)
+		if (valid_bit && ({hit1,hit0} != 2'b00))
+			next_states = END;
+		else if (valid_bit && hit1 == 0 && hit0 == 0 && dirty_bit)
 			next_states = READ_EVIC;
 		else
 			next_states = READ_MISS_LOAD;
@@ -173,14 +183,16 @@ begin : next_state
 		end
 	WRITE:
 		begin
-		if (valid_bit && hit1 == 0 && hit0 == 0 && dirty_bit)
+		if (valid_bit && ({hit1,hit0} != 2'b00))
+			next_states = END;
+		else if (valid_bit && hit1 == 0 && hit0 == 0 && dirty_bit)
 			next_states = WRITE_EVIC;
 		else
 			next_states = WRITE_MISS_LOAD;
 		end
 	WRITE_MISS_LOAD:
 		begin
-		if(pmem_resp  && valid_bit && ({hit1,hit0} != 2'b00))
+		if(pmem_resp && valid_bit && ({hit1,hit0} != 2'b00))
 			next_states = END;
 		else
 			next_states = WRITE_MISS_LOAD;
