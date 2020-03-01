@@ -169,8 +169,8 @@ begin : next_state
 		end
 	READ_MISS_LOAD:
 		begin
-		if(pmem_resp  && valid_bit && ({hit1,hit0} != 2'b00))
-			next_states = END;
+		if(pmem_resp)
+			next_states = READ;
 		else
 			next_states = READ_MISS_LOAD;
 		end
@@ -192,8 +192,8 @@ begin : next_state
 		end
 	WRITE_MISS_LOAD:
 		begin
-		if(pmem_resp && valid_bit && ({hit1,hit0} != 2'b00))
-			next_states = END;
+		if(pmem_resp)
+			next_states = WRITE;
 		else
 			next_states = WRITE_MISS_LOAD;
 		end
