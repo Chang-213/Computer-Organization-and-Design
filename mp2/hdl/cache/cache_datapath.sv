@@ -218,7 +218,7 @@ module cache_datapath #(
 	data_array DATA0(
 		.clk (clk),
 		.rst (rst),
-		.read (array_read),
+		.read (1'b1),
 		.write_en (write0_enable),
 		.rindex (rindex),
 		.windex (windex),
@@ -229,7 +229,7 @@ module cache_datapath #(
 	data_array DATA1(
 		.clk (clk),
 		.rst (rst),
-		.read (array_read),
+		.read (1'b1),
 		.write_en (write1_enable),
 		.rindex (rindex),
 		.windex (windex),

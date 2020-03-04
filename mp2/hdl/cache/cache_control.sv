@@ -116,9 +116,9 @@ begin : state_actions
 		end
 	WRITE_MISS_LOAD:
 		begin
-		pmem_read = 1;
-		pmem_select = 1;
-		data_select = 1;
+		pmem_write = 1;
+		pmem_select = 0;
+		data_select = 0;
 		if(lru_out)
 		begin
 			valid_load1 = 1;

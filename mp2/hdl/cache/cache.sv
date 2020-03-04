@@ -75,8 +75,8 @@ cache_control control
 	.rst (rst),
 	
 	//Cache to Control
-	.read_array (read_array),
-	.write_array (write_array),
+	.read_array (mem_read),
+	.write_array (mem_write),
 	.pmem_resp (pmem_resp),
 	
 	//Datapath to Control
@@ -117,8 +117,8 @@ cache_datapath datapath
 	.pmem_rdata (pmem_rdata),
 	.mem_address (mem_address),
 	.lru_load (lru_load),
-	.read_array (read_array), 
-	.write_array (write_array), 
+	.read_array (mem_read), 
+	.write_array (mem_write), 
 	.data_select (data_select),
 	.dirty_select (dirty_select),
 	.pmem_select (pmem_select),
